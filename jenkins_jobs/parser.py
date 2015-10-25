@@ -313,6 +313,7 @@ class YamlParser(object):
             self.xml_jobs.append(self.getXMLForJob(job))
 
     def getXMLForJob(self, data):
+        logger.debug(data)
         kind = data.get('project-type', 'freestyle')
 
         for ep in pkg_resources.iter_entry_points(
