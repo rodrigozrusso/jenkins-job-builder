@@ -1,5 +1,5 @@
 - job-template:
-    name: workflow_003-{name}
+    name: workflow_002-{name}
     project-type: workflow
     script: |
         node {{
@@ -9,4 +9,4 @@
 - project:
     name: hello
     jobs:
-        - 'workflow_003-{name}'
+        - 'workflow_002-{name}'

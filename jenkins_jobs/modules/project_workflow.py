@@ -60,20 +60,12 @@ class Workflow(jenkins_jobs.modules.base.Base):
             'org.jenkinsci.plugins.workflow.cps.CpsFlowDefinition'
         definition.attrib['plugin'] = 'workflow-cps'
 
-        if 'script' in data:
-            XML.SubElement(definition, 'script').text = data.get('script', '')
+        XML.SubElement(definition, 'script').text = data.get('script', '')
 
-            sandbox = data.get('sandbox', False)
-            XML.SubElement(definition, 'sandbox').text = str(sandbox).lower()
-        elif 'script-path' in data:
-            XML.SubElement(definition, 'scriptPath').text = data.get('script-path', '')
-            scm = jenkins_jobs.modules.scm.SCM
-            print scm
-            # for module in self.registry.modules:
-              # print module
-            # scm_module = self.registry.modules['scm']
-            # logger.info(scm_module)
-            scm.gen_xml(self, xml_parent, data)
-
+        sandbox = data.get('sandbox', False)
+        XML.SubElement(definition, 'sandbox').text = str(sandbox).lower()
 
         return xml_parent
+
+
+
