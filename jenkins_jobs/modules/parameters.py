@@ -35,6 +35,7 @@ Example::
 
 import xml.etree.ElementTree as XML
 import jenkins_jobs.modules.base
+import time
 from jenkins_jobs.errors import JenkinsJobsException
 from jenkins_jobs.errors import MissingAttributeError
 from jenkins_jobs.modules.helpers import copyartifact_build_selector
@@ -564,7 +565,7 @@ def dynamic_param_common(parser, xml_parent, data, ptype):
 
 def dynamic_scriptler_param_common(parser, xml_parent, data, ptype):
     pdef = base_param(parser, xml_parent, data, False,
-                      'com.seitenbau.jenkins.plugins.dynamicparameter.'
+                      'org.biouno.unochoice.CascadeChoiceParameter'
                       'scriptler.' + ptype)
     XML.SubElement(pdef, '__remote').text = str(
         data.get('remote', False)).lower()
@@ -653,6 +654,101 @@ def copyartifact_build_selector_param(parser, xml_parent, data):
 
     copyartifact_build_selector(t, data, 'defaultSelector')
 
+
+def active_choice_param(parser, xml_parent, data):
+    """yaml: active-choice
+    Active Choice Parameter
+    Requires the Jenkins :jenkins-wiki:`Jenkins Active Choice Parameter Plug-in
+    <Active+Choices+Plugin>`.
+
+    :arg str name: the name of the parameter
+    :arg str description: a description of the parameter (optional)
+    :arg str script-id: Groovy script which generates the default value
+    :arg list parameters: parameters to corresponding script
+
+        :Parameter: * **name** (`str`) Parameter name
+                    * **value** (`str`) Parameter value
+    :arg bool remote: the script will be executed on the slave where the build
+        is started (default false)
+    :arg bool read-only: user can't modify parameter once populated
+        (default false)
+
+    Example::
+
+      parameters:
+        - active-choice:
+            name: OPTIONS
+            description: "Available options"
+            script-id: "scriptid.groovy"
+            parameters:
+              - name: param1
+                value: value1
+              - name: param2
+                value: value2
+            choice-type: "['singleSelect', 'multiSelect', 'radioButtons', 'checkBoxes']"
+            enable-filter: false
+    """
+#     active_param_common(parser, xml_parent, data, 'ScriptlerScript')
+    active_param_common(parser, xml_parent, data, 'GroovyScript')
+
+
+def active_param_scriptler_script(data, script, script_type):
+    XML.SubElement(script, 'scriptlerScriptId').text = data.get(
+        'script-id', None)
+    
+    parametersXML = XML.SubElement(script, 'parameters')
+    parameters = data.get('parameters', [])
+    if parameters:
+        for parameter in parameters:
+            parameterXML = XML.SubElement(parametersXML, 'entry')
+            XML.SubElement(parameterXML, 'string').text = parameter['name']
+            XML.SubElement(parameterXML, 'string').text = parameter['value']
+
+def active_param_groovy_script(data, script, script_type):
+    XML.SubElement(script, 'script').text = data.get('script', None)
+    XML.SubElement(script, 'fallbackScript').text = data.get('fallback-script', None)
+    
+def active_param_common(parser, xml_parent, data, script_type):
+    
+    choice_types = {
+        'singleSelect': 'PT_SINGLE_SELECT',
+        'multiSelect': 'PT_MULTI_SELECT',
+        'radioButtons': 'PT_RADIO',
+        'checkBoxes': 'PT_CHECKBOX',
+    }
+    
+    pdef = base_param(parser, xml_parent, data, False,
+                      'org.biouno.unochoice.CascadeChoiceParameter')
+    
+    XML.SubElement(pdef, 'randomName').text = 'choice-parameter-%s' % int(
+                                                                time.time())
+    script = XML.SubElement(pdef, 'script', 
+                            {'class': 'org.biouno.unochoice.model.%s' %
+                             script_type})
+    
+    active_param_groovy_script(data, script, script_type)
+    
+    XML.SubElement(pdef, 'visibleItemCount').text = str(data.get(
+        'visible-items', data.get('visible-item-count', 1)))
+    
+    XML.SubElement(pdef, 'parameters', 
+                            {'class': 'linked-hash-map'})
+# TODO: implement it
+    XML.SubElement(pdef, 'referencedParameters').text = data.get(
+         'referencedParameters')
+    
+    try:
+        choice_type = choice_types[data.get('choice-type',
+                                                         'singleSelect')]
+    except KeyError:
+        raise ValueError('Invalid choice-type %r' %
+                         data.get('choice-type'))
+
+    XML.SubElement(pdef, 'choiceType').text = choice_type
+    
+    XML.SubElement(pdef, 'filterable').text = str(data.get(
+        'filterable', False)).lower()
+    
 
 class Parameters(jenkins_jobs.modules.base.Base):
     sequence = 21

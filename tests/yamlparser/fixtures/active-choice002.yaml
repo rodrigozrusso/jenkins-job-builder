@@ -1,0 +1,13 @@
+- job:
+    name: active_choice
+    project-type: freestyle
+    parameters:
+      - active-choice:
+          name: OPTIONS
+          description: "Available options"
+          script: |
+              return ['Option 1', 'Option 2', 'Option 3']
+          fallback-script: |
+              return [ 'Script error' ]
+          choice-type: "singleSelect"
+          read-only: false
