@@ -5376,6 +5376,27 @@ def phabricator(parser, xml_parent, data):
         XML.SubElement(root, 'commentWithConsoleLinkOnFailure').text = str(
             data.get('comment-with-console-link-on-failure')).lower()
 
+def slack(parser, xml_parent, data):
+    """yaml: hipchat
+    Publisher that sends slack notifications on job events
+    Requires the Jenkins :jenkins-wiki:`Slack Plugin
+    <Slack+Plugin>` version >=1.8
+
+    :arg str token: This will override the default auth token (optional)
+    :arg list teamDomain: This will override the default team domain
+
+    Example:
+
+    .. literalinclude::  /../../tests/publishers/fixtures/slack001.yaml
+       :language: yaml
+    """
+    slack = XML.SubElement(
+        xml_parent,
+        'jenkins.plugins.slack.SlackNotifier')
+    XML.SubElement(slack, 'authToken').text = str(
+        data.get('token', ''))
+    XML.SubElement(slack, 'teamDomain').text = str(
+        data.get('teamDomain', ''))
 
 class Publishers(jenkins_jobs.modules.base.Base):
     sequence = 70

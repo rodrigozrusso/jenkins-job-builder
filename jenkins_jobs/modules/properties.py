@@ -615,6 +615,59 @@ def zeromq_event(parser, xml_parent, data):
                                'ZMQEventPublisher.HudsonNotificationProperty')
     XML.SubElement(zmq_event, 'enabled').text = 'true'
 
+def slack(parser, xml_parent, data):
+    """yaml: slack
+    This is a Jenkins plugin that will publish Jenkins Job run events
+    (start, complete, finish) to a ZMQ PUB socket.
+
+    Requires the Jenkins `ZMQ Event Publisher.
+    <https://git.openstack.org/cgit/openstack-infra/zmq-event-publisher>`_
+
+    Example:
+
+    .. literalinclude:: \
+            /../../tests/properties/fixtures/slack001.yaml
+
+    """
+    # TODO:Fix the documentation
+
+    slack = XML.SubElement(
+        xml_parent,
+        'jenkins.plugins.slack.SlackNotifier_-SlackJobProperty')
+    
+    XML.SubElement(slack, 'teamDomain').text = str(
+        data.get('teamDomain', ''))
+    XML.SubElement(slack, 'authToken').text = str(
+        data.get('token', ''))
+
+    XML.SubElement(slack, 'room').text = str(
+        data.get('project-channel', ''))
+
+    XML.SubElement(slack, 'startNotification').text = str(
+        data.get('notify-start', False)).lower()
+    XML.SubElement(slack, 'notifySuccess').text = str(
+        data.get('notify-success', False)).lower()
+    XML.SubElement(slack, 'notifyAborted').text = str(
+        data.get('notify-aborted', False)).lower()
+    XML.SubElement(slack, 'notifyNotBuilt').text = str(
+        data.get('notify-not-built', False)).lower()
+    XML.SubElement(slack, 'notifyUnstable').text = str(
+        data.get('notify-unstable', False)).lower()
+    XML.SubElement(slack, 'notifyFailure').text = str(
+        data.get('notify-failure', False)).lower()
+    XML.SubElement(slack, 'notifyBackToNormal').text = str(
+        data.get('notify-back-to-normal', False)).lower()
+    XML.SubElement(slack, 'notifyRepeatedFailure').text = str(
+        data.get('notify-repeated-failure', False)).lower()
+    XML.SubElement(slack, 'includeTestSummary').text = str(
+        data.get('include-test-summary', False)).lower()
+    XML.SubElement(slack, 'showCommitList').text = str(
+        data.get('show-commit-list', False)).lower()
+    XML.SubElement(slack, 'includeCustomMessage').text = str(
+        data.get('include-custom-message', False)).lower()
+    XML.SubElement(slack, 'customMessage').text = str(
+        data.get('custom-message', False)).lower()
+
 
 class Properties(jenkins_jobs.modules.base.Base):
     sequence = 20
