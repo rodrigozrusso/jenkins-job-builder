@@ -656,42 +656,43 @@ def copyartifact_build_selector_param(parser, xml_parent, data):
 
 
 def active_choices_param(parser, xml_parent, data):
-    """yaml: active-choice
-    Active Choice Parameter
+    """yaml: active-choices
+    Active Choices Parameter
     Requires the Jenkins :jenkins-wiki:`Jenkins Active Choice Parameter Plug-in
     <Active+Choices+Plugin>`.
 
     :arg str name: the name of the parameter
     :arg str description: a description of the parameter (optional)
-    :arg str script-id: Groovy script which generates the default value
-    :arg list parameters: parameters to corresponding script
+Active Choices Parameter using scriptlet script:
+    :arg str script-id: Groovy script from Scriptler, which generates the default value
+    :arg list parameters: parameters to corresponding script (use this option only with script-id)
 
         :Parameter: * **name** (`str`) Parameter name
                     * **value** (`str`) Parameter value
-    :arg bool remote: the script will be executed on the slave where the build
-        is started (default false)
-    :arg bool read-only: user can't modify parameter once populated
-        (default false)
+Active Choices Parameter using groovy script:
+    :arg str script: Groovy script which generates the default value
+    :arg str fallback-script: if the value generator script raises an exception.
+    
+    :arg str choice-type: type of select, can be singleSelect, multiSelect,
+        radioButtons or checkBoxes
+        
+    :arg bool filterable: it will enable the filter option (default false)
 
     Example::
 
-      parameters:
-        - active-choice:
-            name: OPTIONS
-            description: "Available options"
-            script-id: "scriptid.groovy"
-            parameters:
-              - name: param1
-                value: value1
-              - name: param2
-                value: value2
-            choice-type: "['singleSelect', 'multiSelect', 'radioButtons', 'checkBoxes']"
-            enable-filter: false
+Job example runninng an Active Choices Parameter using scriptlet script:
+    .. literalinclude::
+        /../../tests/yamlparser/fixtures/active-choices-param001.yaml
+       :language: yaml
+       
+Job example runninng an Active Choices Parameter using groovy script:
+    .. literalinclude::
+        /../../tests/yamlparser/fixtures/active-choices-param002.yaml
+       :language: yaml
     """
     active_choices_param_common(parser, xml_parent, data, 'ChoiceParameter')
    
 def active_choices_reactive_param(parser, xml_parent, data):
-    #TODO:create documentation
     """yaml: active-choice-reactive
     Active Choice Parameter
     Requires the Jenkins :jenkins-wiki:`Jenkins Active Choice Parameter Plug-in
@@ -699,34 +700,78 @@ def active_choices_reactive_param(parser, xml_parent, data):
 
     :arg str name: the name of the parameter
     :arg str description: a description of the parameter (optional)
-    :arg str script-id: Groovy script which generates the default value
-    :arg list parameters: parameters to corresponding script
+Active Choices Parameter using scriptlet script:
+    :arg str script-id: Groovy script from Scriptler, which generates the default value
+    :arg list parameters: parameters to corresponding script (use this option only with script-id)
 
         :Parameter: * **name** (`str`) Parameter name
                     * **value** (`str`) Parameter value
-    :arg bool remote: the script will be executed on the slave where the build
-        is started (default false)
-    :arg bool read-only: user can't modify parameter once populated
-        (default false)
+Active Choices Parameter using groovy script:
+    :arg str script: Groovy script which generates the default value
+    :arg str fallback-script: if the value generator script raises an exception.
+    
+    :arg str choice-type: type of select, can be singleSelect, multiSelect,
+        radioButtons or checkBoxes
+        
+    :arg str referenced-parameters: Comma separated list of other job 
+        parameters referenced in the script
+    :arg bool filterable: it will enable the filter option (default false)
 
     Example::
 
-      parameters:
-        - active-choice:
-            name: OPTIONS
-            description: "Available options"
-            script-id: "scriptid.groovy"
-            parameters:
-              - name: param1
-                value: value1
-              - name: param2
-                value: value2
-            choice-type: "['singleSelect', 'multiSelect', 'radioButtons', 'checkBoxes']"
-            enable-filter: false
+Job example runninng an Active Choices Parameter using scriptlet script:
+    .. literalinclude::
+        /../../tests/yamlparser/fixtures/active-choices-reactive-param001.yaml
+       :language: yaml
+       
+Job example runninng an Active Choices Parameter using groovy script:
+    .. literalinclude::
+        /../../tests/yamlparser/fixtures/active-choices-reactive-param002.yaml
+       :language: yaml
     """
     active_choices_param_common(parser, xml_parent, data, 'CascadeChoiceParameter')
     
 def active_choices_reactive_reference_param(parser, xml_parent, data):
+    """yaml: active-choices-reactive-reference
+    Active Choice Parameter
+    Requires the Jenkins :jenkins-wiki:`Jenkins Active Choice Parameter Plug-in
+    <Active+Choices+Plugin>`.
+
+    :arg str name: the name of the parameter
+    :arg str description: a description of the parameter (optional)
+Active Choices Parameter using scriptlet script:
+    :arg str script-id: Groovy script from Scriptler, which generates the default value
+    :arg list parameters: parameters to corresponding script (use this option only with script-id)
+
+        :Parameter: * **name** (`str`) Parameter name
+                    * **value** (`str`) Parameter value
+Active Choices Parameter using groovy script:
+    :arg str script: Groovy script which generates the default value
+    :arg str fallback-script: if the value generator script raises an exception.
+    
+    :arg str choice-type: type of select, can be inputTextBox, numberedList, 
+        bulletItemsList, formattedHtml, 
+        formattedHiddenHtml
+        
+    :arg str referenced-parameters: Comma separated list of other job 
+        parameters referenced in the script
+    :arg bool omit-value-field: By default it always include a hidden input 
+        for the value. If your script creates an input HTML element, 
+        you can check this option and the value input 
+        field will be omitted. (default false)
+
+    Example::
+
+Job example runninng an Active Choices Parameter using scriptlet script:
+    .. literalinclude::
+        /../../tests/yamlparser/fixtures/active-choices-reactive-param001.yaml
+       :language: yaml
+       
+Job example runninng an Active Choices Parameter using groovy script:
+    .. literalinclude::
+        /../../tests/yamlparser/fixtures/active-choices-reactive-param002.yaml
+       :language: yaml
+    """
     active_choices_param_common(parser, xml_parent, data, 'DynamicReferenceParameter')
     
 def active_choices_param_common(parser, xml_parent, data, ptype):
@@ -741,6 +786,16 @@ def active_choices_param_common(parser, xml_parent, data, ptype):
         'bulletItemsList': 'ET_UNORDERED_LIST',
         'formattedHtml': 'ET_FORMATTED_HTML',
         'formattedHiddenHtml': 'ET_FORMATTED_HIDDEN_HTML',
+        'PT_SINGLE_SELECT': 'PT_SINGLE_SELECT',
+        'PT_MULTI_SELECT': 'PT_MULTI_SELECT',
+        'PT_RADIO': 'PT_RADIO',
+        'PT_CHECKBOX': 'PT_CHECKBOX',
+        'PT_CHECKBOX': 'PT_CHECKBOX',
+        'ET_TEXT_BOX': 'ET_TEXT_BOX',
+        'ET_ORDERED_LIST': 'ET_ORDERED_LIST',
+        'ET_UNORDERED_LIST': 'ET_UNORDERED_LIST',
+        'ET_FORMATTED_HTML': 'ET_FORMATTED_HTML',
+        'ET_FORMATTED_HIDDEN_HTML': 'ET_FORMATTED_HIDDEN_HTML'
     }
     
     pdef = base_param(parser, xml_parent, data, False,
@@ -781,8 +836,7 @@ def active_choices_param_common(parser, xml_parent, data, ptype):
           'referenced-parameters')
 
     try:
-        choice_type = choice_types[data.get('choice-type',
-                                                         'singleSelect')]
+        choice_type = choice_types[data.get('choice-type')]
     except KeyError:
         raise ValueError('Invalid choice-type %r' %
                          data.get('choice-type'))

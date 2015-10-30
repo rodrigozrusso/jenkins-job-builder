@@ -11,4 +11,4 @@
               return [ 'Script error' ]
           referenced-parameters: ANOTHER_PARAM1,ANOTHER_PARAM2
           choice-type: "singleSelect"
-          read-only: false
+          filterable: false
