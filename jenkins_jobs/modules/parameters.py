@@ -688,27 +688,9 @@ def active_choice_param(parser, xml_parent, data):
             choice-type: "['singleSelect', 'multiSelect', 'radioButtons', 'checkBoxes']"
             enable-filter: false
     """
-#     active_param_common(parser, xml_parent, data, 'ScriptlerScript')
-    active_param_common(parser, xml_parent, data, 'GroovyScript')
-
-
-def active_param_scriptler_script(data, script, script_type):
-    XML.SubElement(script, 'scriptlerScriptId').text = data.get(
-        'script-id', None)
-    
-    parametersXML = XML.SubElement(script, 'parameters')
-    parameters = data.get('parameters', [])
-    if parameters:
-        for parameter in parameters:
-            parameterXML = XML.SubElement(parametersXML, 'entry')
-            XML.SubElement(parameterXML, 'string').text = parameter['name']
-            XML.SubElement(parameterXML, 'string').text = parameter['value']
-
-def active_param_groovy_script(data, script, script_type):
-    XML.SubElement(script, 'script').text = data.get('script', None)
-    XML.SubElement(script, 'fallbackScript').text = data.get('fallback-script', None)
-    
-def active_param_common(parser, xml_parent, data, script_type):
+    active_param_common(parser, xml_parent, data)
+   
+def active_param_common(parser, xml_parent, data):
     
     choice_types = {
         'singleSelect': 'PT_SINGLE_SELECT',
@@ -718,24 +700,34 @@ def active_param_common(parser, xml_parent, data, script_type):
     }
     
     pdef = base_param(parser, xml_parent, data, False,
-                      'org.biouno.unochoice.CascadeChoiceParameter')
+                      'org.biouno.unochoice.ChoiceParameter')
     
     XML.SubElement(pdef, 'randomName').text = 'choice-parameter-%s' % int(
                                                                 time.time())
-    script = XML.SubElement(pdef, 'script', 
-                            {'class': 'org.biouno.unochoice.model.%s' %
-                             script_type})
-    
-    active_param_groovy_script(data, script, script_type)
-    
+    # Use scriptlet
+    if 'script-id' in data:
+        script = XML.SubElement(pdef, 'script', 
+                                {'class': 'org.biouno.unochoice.model.'
+                                 'ScriptlerScript'})
+        XML.SubElement(script, 'scriptlerScriptId').text = data.get(
+            'script-id', None)
+        
+        parametersXML = XML.SubElement(script, 'parameters')
+        parameters = data.get('parameters', [])
+        if parameters:
+            for parameter in parameters:
+                parameterXML = XML.SubElement(parametersXML, 'entry')
+                XML.SubElement(parameterXML, 'string').text = parameter['name']
+                XML.SubElement(parameterXML, 'string').text = parameter['value']
+    else:
+        script = XML.SubElement(pdef, 'script', 
+                            {'class': 'org.biouno.unochoice.model.'
+                             'GroovyScript'})
+        XML.SubElement(script, 'script').text = data.get('script', None)
+        XML.SubElement(script, 'fallbackScript').text = data.get('fallback-script', None)
+        
     XML.SubElement(pdef, 'visibleItemCount').text = str(data.get(
         'visible-items', data.get('visible-item-count', 1)))
-    
-    XML.SubElement(pdef, 'parameters', 
-                            {'class': 'linked-hash-map'})
-# TODO: implement it
-    XML.SubElement(pdef, 'referencedParameters').text = data.get(
-         'referencedParameters')
     
     try:
         choice_type = choice_types[data.get('choice-type',

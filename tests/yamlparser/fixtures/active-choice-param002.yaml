@@ -1,5 +1,5 @@
 - job:
-    name: active_choice
+    name: active_choice_param002
     project-type: freestyle
     parameters:
       - active-choice:

@@ -1,11 +1,11 @@
 - job:
-    name: active_choice
+    name: active_choice_param001
     project-type: freestyle
     parameters:
       - active-choice:
           name: OPTIONS
           description: "Available options"
-          script-id: "ArchivaHelper.groovy"
+          script-id: "Scriptler001.groovy"
           parameters:
               - name: param1
                 value: value1
