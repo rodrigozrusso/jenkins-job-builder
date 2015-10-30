@@ -1,0 +1,14 @@
+- job:
+    name: active_choice_reactive_reference_param002
+    project-type: freestyle
+    parameters:
+      - active-choices-reactive-reference:
+          name: OPTIONS
+          description: "Available options"
+          script: |
+              return ['Option 1', 'Option 2', 'Option 3']
+          fallback-script: |
+              return [ 'Script error' ]
+          referenced-parameters: ANOTHER_PARAM1,ANOTHER_PARAM2
+          choice-type: "inputTextBox"
+          read-only: false

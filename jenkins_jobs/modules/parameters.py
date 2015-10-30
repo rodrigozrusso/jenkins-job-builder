@@ -726,6 +726,8 @@ def active_choices_reactive_param(parser, xml_parent, data):
     """
     active_choices_param_common(parser, xml_parent, data, 'CascadeChoiceParameter')
     
+def active_choices_reactive_reference_param(parser, xml_parent, data):
+    active_choices_param_common(parser, xml_parent, data, 'DynamicReferenceParameter')
     
 def active_choices_param_common(parser, xml_parent, data, ptype):
     
@@ -734,6 +736,11 @@ def active_choices_param_common(parser, xml_parent, data, ptype):
         'multiSelect': 'PT_MULTI_SELECT',
         'radioButtons': 'PT_RADIO',
         'checkBoxes': 'PT_CHECKBOX',
+        'inputTextBox': 'ET_TEXT_BOX',
+        'numberedList': 'ET_ORDERED_LIST',
+        'bulletItemsList': 'ET_UNORDERED_LIST',
+        'formattedHtml': 'ET_FORMATTED_HTML',
+        'formattedHiddenHtml': 'ET_FORMATTED_HIDDEN_HTML',
     }
     
     pdef = base_param(parser, xml_parent, data, False,
@@ -781,6 +788,10 @@ def active_choices_param_common(parser, xml_parent, data, ptype):
                          data.get('choice-type'))
 
     XML.SubElement(pdef, 'choiceType').text = choice_type
+    
+    if 'omit-value-field' in data:
+        XML.SubElement(pdef, 'omitValueField').text = str(data.get(
+            'omit-value-field', False)).lower()
     
     XML.SubElement(pdef, 'filterable').text = str(data.get(
         'filterable', False)).lower()
