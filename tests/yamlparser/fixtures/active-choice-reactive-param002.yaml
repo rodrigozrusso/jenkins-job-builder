@@ -1,13 +1,14 @@
 - job:
-    name: active_choice_param002
+    name: active_choice_reactive_param002
     project-type: freestyle
     parameters:
-      - active-choices:
+      - active-choices-reactive:
           name: OPTIONS
           description: "Available options"
           script: |
               return ['Option 1', 'Option 2', 'Option 3']
           fallback-script: |
               return [ 'Script error' ]
+          referenced-parameters: ANOTHER_PARAM1,ANOTHER_PARAM2
           choice-type: "singleSelect"
           read-only: false

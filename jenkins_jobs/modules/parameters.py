@@ -655,7 +655,7 @@ def copyartifact_build_selector_param(parser, xml_parent, data):
     copyartifact_build_selector(t, data, 'defaultSelector')
 
 
-def active_choice_param(parser, xml_parent, data):
+def active_choices_param(parser, xml_parent, data):
     """yaml: active-choice
     Active Choice Parameter
     Requires the Jenkins :jenkins-wiki:`Jenkins Active Choice Parameter Plug-in
@@ -688,9 +688,46 @@ def active_choice_param(parser, xml_parent, data):
             choice-type: "['singleSelect', 'multiSelect', 'radioButtons', 'checkBoxes']"
             enable-filter: false
     """
-    active_param_common(parser, xml_parent, data)
+    active_choices_param_common(parser, xml_parent, data, 'ChoiceParameter')
    
-def active_param_common(parser, xml_parent, data):
+def active_choices_reactive_param(parser, xml_parent, data):
+    #TODO:create documentation
+    """yaml: active-choice-reactive
+    Active Choice Parameter
+    Requires the Jenkins :jenkins-wiki:`Jenkins Active Choice Parameter Plug-in
+    <Active+Choices+Plugin>`.
+
+    :arg str name: the name of the parameter
+    :arg str description: a description of the parameter (optional)
+    :arg str script-id: Groovy script which generates the default value
+    :arg list parameters: parameters to corresponding script
+
+        :Parameter: * **name** (`str`) Parameter name
+                    * **value** (`str`) Parameter value
+    :arg bool remote: the script will be executed on the slave where the build
+        is started (default false)
+    :arg bool read-only: user can't modify parameter once populated
+        (default false)
+
+    Example::
+
+      parameters:
+        - active-choice:
+            name: OPTIONS
+            description: "Available options"
+            script-id: "scriptid.groovy"
+            parameters:
+              - name: param1
+                value: value1
+              - name: param2
+                value: value2
+            choice-type: "['singleSelect', 'multiSelect', 'radioButtons', 'checkBoxes']"
+            enable-filter: false
+    """
+    active_choices_param_common(parser, xml_parent, data, 'CascadeChoiceParameter')
+    
+    
+def active_choices_param_common(parser, xml_parent, data, ptype):
     
     choice_types = {
         'singleSelect': 'PT_SINGLE_SELECT',
@@ -700,7 +737,7 @@ def active_param_common(parser, xml_parent, data):
     }
     
     pdef = base_param(parser, xml_parent, data, False,
-                      'org.biouno.unochoice.ChoiceParameter')
+                      'org.biouno.unochoice.%s' % ptype)
     
     XML.SubElement(pdef, 'randomName').text = 'choice-parameter-%s' % int(
                                                                 time.time())
@@ -728,7 +765,14 @@ def active_param_common(parser, xml_parent, data):
         
     XML.SubElement(pdef, 'visibleItemCount').text = str(data.get(
         'visible-items', data.get('visible-item-count', 1)))
-    
+
+    if 'referenced-parameters' in data:
+        XML.SubElement(pdef, 'parameters', 
+                            {'class': 'linked-hash-map'})
+
+        XML.SubElement(pdef, 'referencedParameters').text = data.get(
+          'referenced-parameters')
+
     try:
         choice_type = choice_types[data.get('choice-type',
                                                          'singleSelect')]

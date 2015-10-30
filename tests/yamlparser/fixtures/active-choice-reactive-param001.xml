@@ -1,0 +1,44 @@
+OrderedDict([('active-choices-reactive', OrderedDict([('name', 'OPTIONS'), ('description', 'Available options'), ('script-id', 'Scriptler001.groovy'), ('parameters', [OrderedDict([('name', 'param1'), ('value', 'value1')]), OrderedDict([('name', 'param2'), ('value', 'value2')])]), ('referenced-parameters', 'ANOTHER_PARAM1,ANOTHER_PARAM2'), ('choice-type', 'singleSelect'), ('read-only', False)]))])
+<?xml version="1.0" encoding="utf-8"?>
+<project>
+  <actions/>
+  <description>&lt;!-- Managed by Jenkins Job Builder --&gt;</description>
+  <keepDependencies>false</keepDependencies>
+  <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
+  <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
+  <concurrentBuild>false</concurrentBuild>
+  <canRoam>true</canRoam>
+  <properties>
+    <hudson.model.ParametersDefinitionProperty>
+      <parameterDefinitions>
+        <org.biouno.unochoice.CascadeChoiceParameter>
+          <name>OPTIONS</name>
+          <description>Available options</description>
+          <randomName>choice-parameter-1446211637</randomName>
+          <script class="org.biouno.unochoice.model.ScriptlerScript">
+            <scriptlerScriptId>Scriptler001.groovy</scriptlerScriptId>
+            <parameters>
+              <entry>
+                <string>param1</string>
+                <string>value1</string>
+              </entry>
+              <entry>
+                <string>param2</string>
+                <string>value2</string>
+              </entry>
+            </parameters>
+          </script>
+          <visibleItemCount>1</visibleItemCount>
+          <parameters class="linked-hash-map"/>
+          <referencedParameters>ANOTHER_PARAM1,ANOTHER_PARAM2</referencedParameters>
+          <choiceType>PT_SINGLE_SELECT</choiceType>
+          <filterable>false</filterable>
+        </org.biouno.unochoice.CascadeChoiceParameter>
+      </parameterDefinitions>
+    </hudson.model.ParametersDefinitionProperty>
+  </properties>
+  <scm class="hudson.scm.NullSCM"/>
+  <builders/>
+  <publishers/>
+  <buildWrappers/>
+</project>

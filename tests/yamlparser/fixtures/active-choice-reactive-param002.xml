@@ -1,0 +1,37 @@
+OrderedDict([('active-choices-reactive', OrderedDict([('name', 'OPTIONS'), ('description', 'Available options'), ('script', "return ['Option 1', 'Option 2', 'Option 3']\n"), ('fallback-script', "return [ 'Script error' ]\n"), ('referenced-parameters', 'ANOTHER_PARAM1,ANOTHER_PARAM2'), ('choice-type', 'singleSelect'), ('read-only', False)]))])
+<?xml version="1.0" encoding="utf-8"?>
+<project>
+  <actions/>
+  <description>&lt;!-- Managed by Jenkins Job Builder --&gt;</description>
+  <keepDependencies>false</keepDependencies>
+  <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
+  <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
+  <concurrentBuild>false</concurrentBuild>
+  <canRoam>true</canRoam>
+  <properties>
+    <hudson.model.ParametersDefinitionProperty>
+      <parameterDefinitions>
+        <org.biouno.unochoice.CascadeChoiceParameter>
+          <name>OPTIONS</name>
+          <description>Available options</description>
+          <randomName>choice-parameter-1446211648</randomName>
+          <script class="org.biouno.unochoice.model.GroovyScript">
+            <script>return ['Option 1', 'Option 2', 'Option 3']
+</script>
+            <fallbackScript>return [ 'Script error' ]
+</fallbackScript>
+          </script>
+          <visibleItemCount>1</visibleItemCount>
+          <parameters class="linked-hash-map"/>
+          <referencedParameters>ANOTHER_PARAM1,ANOTHER_PARAM2</referencedParameters>
+          <choiceType>PT_SINGLE_SELECT</choiceType>
+          <filterable>false</filterable>
+        </org.biouno.unochoice.CascadeChoiceParameter>
+      </parameterDefinitions>
+    </hudson.model.ParametersDefinitionProperty>
+  </properties>
+  <scm class="hudson.scm.NullSCM"/>
+  <builders/>
+  <publishers/>
+  <buildWrappers/>
+</project>
