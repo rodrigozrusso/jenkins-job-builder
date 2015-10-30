@@ -11,3 +11,5 @@
               return [ 'Script error' ]
           choice-type: "singleSelect"
           filterable: false
+#random-name is not necessary, this is here to avoid problems in unittests
+          random-name: choice-parameter-12345678

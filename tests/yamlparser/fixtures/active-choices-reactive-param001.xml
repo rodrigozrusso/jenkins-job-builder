@@ -14,7 +14,7 @@ OrderedDict([('active-choices-reactive', OrderedDict([('name', 'OPTIONS'), ('des
         <org.biouno.unochoice.CascadeChoiceParameter>
           <name>OPTIONS</name>
           <description>Available options</description>
-          <randomName>choice-parameter-1446211637</randomName>
+          <randomName>choice-parameter-12345678</randomName>
           <script class="org.biouno.unochoice.model.ScriptlerScript">
             <scriptlerScriptId>Scriptler001.groovy</scriptlerScriptId>
             <parameters>

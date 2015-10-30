@@ -13,7 +13,7 @@
         <org.biouno.unochoice.DynamicReferenceParameter>
           <name>OPTIONS</name>
           <description>Available options</description>
-          <randomName>choice-parameter-1446214721</randomName>
+          <randomName>choice-parameter-12345678</randomName>
           <script class="org.biouno.unochoice.model.GroovyScript">
             <script>return ['Option 1', 'Option 2', 'Option 3']
 </script>
@@ -24,7 +24,7 @@
           <parameters class="linked-hash-map"/>
           <referencedParameters>ANOTHER_PARAM1,ANOTHER_PARAM2</referencedParameters>
           <choiceType>ET_TEXT_BOX</choiceType>
-          <filterable>false</filterable>
+          <omitValueField>true</omitValueField>
         </org.biouno.unochoice.DynamicReferenceParameter>
       </parameterDefinitions>
     </hudson.model.ParametersDefinitionProperty>

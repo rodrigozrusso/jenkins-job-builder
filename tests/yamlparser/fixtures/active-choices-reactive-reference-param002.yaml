@@ -11,4 +11,6 @@
               return [ 'Script error' ]
           referenced-parameters: ANOTHER_PARAM1,ANOTHER_PARAM2
           choice-type: "inputTextBox"
-          read-only: false
+          omit-value-field: true
+#random-name is not necessary, this is here to avoid problems in unittests
+          random-name: choice-parameter-12345678

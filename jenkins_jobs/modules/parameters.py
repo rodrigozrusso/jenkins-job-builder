@@ -801,8 +801,8 @@ def active_choices_param_common(parser, xml_parent, data, ptype):
     pdef = base_param(parser, xml_parent, data, False,
                       'org.biouno.unochoice.%s' % ptype)
     
-    XML.SubElement(pdef, 'randomName').text = 'choice-parameter-%s' % int(
-                                                                time.time())
+    XML.SubElement(pdef, 'randomName').text = data.get('random-name', 
+                                'choice-parameter-%s' % int(time.time()))
     # Use scriptlet
     if 'script-id' in data:
         script = XML.SubElement(pdef, 'script', 
@@ -847,8 +847,9 @@ def active_choices_param_common(parser, xml_parent, data, ptype):
         XML.SubElement(pdef, 'omitValueField').text = str(data.get(
             'omit-value-field', False)).lower()
     
-    XML.SubElement(pdef, 'filterable').text = str(data.get(
-        'filterable', False)).lower()
+    if 'filterable' in data:
+        XML.SubElement(pdef, 'filterable').text = str(data.get(
+            'filterable', False)).lower()
     
 
 class Parameters(jenkins_jobs.modules.base.Base):

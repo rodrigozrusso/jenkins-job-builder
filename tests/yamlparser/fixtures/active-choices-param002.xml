@@ -13,7 +13,7 @@
         <org.biouno.unochoice.ChoiceParameter>
           <name>OPTIONS</name>
           <description>Available options</description>
-          <randomName>choice-parameter-1446197521</randomName>
+          <randomName>choice-parameter-12345678</randomName>
           <script class="org.biouno.unochoice.model.GroovyScript">
             <script>return ['Option 1', 'Option 2', 'Option 3']
 </script>
