@@ -1,4 +1,3 @@
-OrderedDict([('active-choices-reactive', OrderedDict([('name', 'OPTIONS'), ('description', 'Available options'), ('script-id', 'Scriptler001.groovy'), ('parameters', [OrderedDict([('name', 'param1'), ('value', 'value1')]), OrderedDict([('name', 'param2'), ('value', 'value2')])]), ('referenced-parameters', 'ANOTHER_PARAM1,ANOTHER_PARAM2'), ('choice-type', 'singleSelect'), ('read-only', False)]))])
 <?xml version="1.0" encoding="utf-8"?>
 <project>
   <actions/>
