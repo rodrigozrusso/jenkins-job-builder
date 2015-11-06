@@ -1,0 +1,12 @@
+- job:
+    name: slack-test
+    project-type: freestyle
+    properties:
+      - slack:
+          token: SlgzqdI80JEJ6lqFHmo4mKBr
+          team-domain: goodgamestudios
+          project-channel: jenkins-test
+          notify-start: true
+    publishers:
+      - slack
+    

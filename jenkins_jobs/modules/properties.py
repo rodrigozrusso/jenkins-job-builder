@@ -630,14 +630,14 @@ def slack(parser, xml_parent, data):
 
     """
     # TODO:Fix the documentation
+    print data
 
     slack = XML.SubElement(
         xml_parent,
         'jenkins.plugins.slack.SlackNotifier_-SlackJobProperty')
     
-    XML.SubElement(slack, 'teamDomain').text = str(
-        data.get('teamDomain', ''))
-    XML.SubElement(slack, 'authToken').text = str(
+    XML.SubElement(slack, 'teamDomain').text = data.get('team-domain', '')
+    XML.SubElement(slack, 'token').text = str(
         data.get('token', ''))
 
     XML.SubElement(slack, 'room').text = str(

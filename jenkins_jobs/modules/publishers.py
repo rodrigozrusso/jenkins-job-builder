@@ -5377,7 +5377,7 @@ def phabricator(parser, xml_parent, data):
             data.get('comment-with-console-link-on-failure')).lower()
 
 def slack(parser, xml_parent, data):
-    """yaml: hipchat
+    """yaml: slack
     Publisher that sends slack notifications on job events
     Requires the Jenkins :jenkins-wiki:`Slack Plugin
     <Slack+Plugin>` version >=1.8
@@ -5390,13 +5390,10 @@ def slack(parser, xml_parent, data):
     .. literalinclude::  /../../tests/publishers/fixtures/slack001.yaml
        :language: yaml
     """
-    slack = XML.SubElement(
-        xml_parent,
-        'jenkins.plugins.slack.SlackNotifier')
-    XML.SubElement(slack, 'authToken').text = str(
-        data.get('token', ''))
-    XML.SubElement(slack, 'teamDomain').text = str(
-        data.get('teamDomain', ''))
+    # authToken and teamDomain are added by jenkins in a manually job, but
+    # those elements are not necessary
+
+    slack = XML.SubElement(xml_parent, 'jenkins.plugins.slack.SlackNotifier')
 
 class Publishers(jenkins_jobs.modules.base.Base):
     sequence = 70
