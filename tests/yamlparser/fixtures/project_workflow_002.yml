@@ -1,0 +1,12 @@
+- job-template:
+    name: workflow_002-{name}
+    project-type: workflow
+    script: |
+        node {{
+            echo 'hello from Workflow'
+        }}
+
+- project:
+    name: hello
+    jobs:
+        - 'workflow_002-{name}'
