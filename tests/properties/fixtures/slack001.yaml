@@ -1,0 +1,6 @@
+properties:
+  - slack:
+      token: SlgzqdI81JEJ6lqFHmo4mKBr
+      team-domain: elitesquad
+      project-channel: slum
+      notify-start: true

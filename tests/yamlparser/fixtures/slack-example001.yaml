@@ -1,0 +1,12 @@
+- job:
+    name: slack-test
+    project-type: freestyle
+    properties:
+      - slack:
+          token: SlgzqdI81JEJ6lqFHmo4mKBr
+          team-domain: elitesquad
+          project-channel: slum
+          notify-start: true
+    publishers:
+      - slack
+    

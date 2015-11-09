@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<project>
+  <actions/>
+  <description>&lt;!-- Managed by Jenkins Job Builder --&gt;</description>
+  <keepDependencies>false</keepDependencies>
+  <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
+  <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
+  <concurrentBuild>false</concurrentBuild>
+  <canRoam>true</canRoam>
+  <properties>
+    <jenkins.plugins.slack.SlackNotifier_-SlackJobProperty>
+      <teamDomain>elitesquad</teamDomain>
+      <token>SlgzqdI81JEJ6lqFHmo4mKBr</token>
+      <room>slum</room>
+      <startNotification>true</startNotification>
+      <notifySuccess>false</notifySuccess>
+      <notifyAborted>false</notifyAborted>
+      <notifyNotBuilt>false</notifyNotBuilt>
+      <notifyUnstable>false</notifyUnstable>
+      <notifyFailure>false</notifyFailure>
+      <notifyBackToNormal>false</notifyBackToNormal>
+      <notifyRepeatedFailure>false</notifyRepeatedFailure>
+      <includeTestSummary>false</includeTestSummary>
+      <showCommitList>false</showCommitList>
+      <includeCustomMessage>false</includeCustomMessage>
+      <customMessage>false</customMessage>
+    </jenkins.plugins.slack.SlackNotifier_-SlackJobProperty>
+  </properties>
+  <scm class="hudson.scm.NullSCM"/>
+  <builders/>
+  <publishers>
+    <jenkins.plugins.slack.SlackNotifier/>
+  </publishers>
+  <buildWrappers/>
+</project>
