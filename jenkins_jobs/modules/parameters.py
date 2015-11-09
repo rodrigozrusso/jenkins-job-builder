@@ -35,6 +35,7 @@ Example::
 
 import xml.etree.ElementTree as XML
 import jenkins_jobs.modules.base
+import time
 from jenkins_jobs.errors import JenkinsJobsException
 from jenkins_jobs.errors import MissingAttributeError
 from jenkins_jobs.modules.helpers import copyartifact_build_selector
@@ -564,7 +565,7 @@ def dynamic_param_common(parser, xml_parent, data, ptype):
 
 def dynamic_scriptler_param_common(parser, xml_parent, data, ptype):
     pdef = base_param(parser, xml_parent, data, False,
-                      'com.seitenbau.jenkins.plugins.dynamicparameter.'
+                      'org.biouno.unochoice.CascadeChoiceParameter'
                       'scriptler.' + ptype)
     XML.SubElement(pdef, '__remote').text = str(
         data.get('remote', False)).lower()
@@ -653,6 +654,203 @@ def copyartifact_build_selector_param(parser, xml_parent, data):
 
     copyartifact_build_selector(t, data, 'defaultSelector')
 
+
+def active_choices_param(parser, xml_parent, data):
+    """yaml: active-choices
+    Active Choices Parameter
+    Requires the Jenkins :jenkins-wiki:`Jenkins Active Choice Parameter Plug-in
+    <Active+Choices+Plugin>`.
+
+    :arg str name: the name of the parameter
+    :arg str description: a description of the parameter (optional)
+Active Choices Parameter using scriptlet script:
+    :arg str script-id: Groovy script from Scriptler, which generates the default value
+    :arg list parameters: parameters to corresponding script (use this option only with script-id)
+
+        :Parameter: * **name** (`str`) Parameter name
+                    * **value** (`str`) Parameter value
+Active Choices Parameter using groovy script:
+    :arg str script: Groovy script which generates the default value
+    :arg str fallback-script: if the value generator script raises an exception.
+    
+    :arg str choice-type: type of select, can be singleSelect, multiSelect,
+        radioButtons or checkBoxes
+        
+    :arg bool filterable: it will enable the filter option (default false)
+
+    Example::
+
+Job example runninng an Active Choices Parameter using scriptlet script:
+    .. literalinclude::
+        /../../tests/yamlparser/fixtures/active-choices-param001.yaml
+       :language: yaml
+       
+Job example runninng an Active Choices Parameter using groovy script:
+    .. literalinclude::
+        /../../tests/yamlparser/fixtures/active-choices-param002.yaml
+       :language: yaml
+    """
+    active_choices_param_common(parser, xml_parent, data, 'ChoiceParameter')
+   
+def active_choices_reactive_param(parser, xml_parent, data):
+    """yaml: active-choice-reactive
+    Active Choice Parameter
+    Requires the Jenkins :jenkins-wiki:`Jenkins Active Choice Parameter Plug-in
+    <Active+Choices+Plugin>`.
+
+    :arg str name: the name of the parameter
+    :arg str description: a description of the parameter (optional)
+Active Choices Parameter using scriptlet script:
+    :arg str script-id: Groovy script from Scriptler, which generates the default value
+    :arg list parameters: parameters to corresponding script (use this option only with script-id)
+
+        :Parameter: * **name** (`str`) Parameter name
+                    * **value** (`str`) Parameter value
+Active Choices Parameter using groovy script:
+    :arg str script: Groovy script which generates the default value
+    :arg str fallback-script: if the value generator script raises an exception.
+    
+    :arg str choice-type: type of select, can be singleSelect, multiSelect,
+        radioButtons or checkBoxes
+        
+    :arg str referenced-parameters: Comma separated list of other job 
+        parameters referenced in the script
+    :arg bool filterable: it will enable the filter option (default false)
+
+    Example::
+
+Job example runninng an Active Choices Parameter using scriptlet script:
+    .. literalinclude::
+        /../../tests/yamlparser/fixtures/active-choices-reactive-param001.yaml
+       :language: yaml
+       
+Job example runninng an Active Choices Parameter using groovy script:
+    .. literalinclude::
+        /../../tests/yamlparser/fixtures/active-choices-reactive-param002.yaml
+       :language: yaml
+    """
+    active_choices_param_common(parser, xml_parent, data, 'CascadeChoiceParameter')
+    
+def active_choices_reactive_reference_param(parser, xml_parent, data):
+    """yaml: active-choices-reactive-reference
+    Active Choice Parameter
+    Requires the Jenkins :jenkins-wiki:`Jenkins Active Choice Parameter Plug-in
+    <Active+Choices+Plugin>`.
+
+    :arg str name: the name of the parameter
+    :arg str description: a description of the parameter (optional)
+Active Choices Parameter using scriptlet script:
+    :arg str script-id: Groovy script from Scriptler, which generates the default value
+    :arg list parameters: parameters to corresponding script (use this option only with script-id)
+
+        :Parameter: * **name** (`str`) Parameter name
+                    * **value** (`str`) Parameter value
+Active Choices Parameter using groovy script:
+    :arg str script: Groovy script which generates the default value
+    :arg str fallback-script: if the value generator script raises an exception.
+    
+    :arg str choice-type: type of select, can be inputTextBox, numberedList, 
+        bulletItemsList, formattedHtml, 
+        formattedHiddenHtml
+        
+    :arg str referenced-parameters: Comma separated list of other job 
+        parameters referenced in the script
+    :arg bool omit-value-field: By default it always include a hidden input 
+        for the value. If your script creates an input HTML element, 
+        you can check this option and the value input 
+        field will be omitted. (default false)
+
+    Example::
+
+Job example runninng an Active Choices Parameter using scriptlet script:
+    .. literalinclude::
+        /../../tests/yamlparser/fixtures/active-choices-reactive-param001.yaml
+       :language: yaml
+       
+Job example runninng an Active Choices Parameter using groovy script:
+    .. literalinclude::
+        /../../tests/yamlparser/fixtures/active-choices-reactive-param002.yaml
+       :language: yaml
+    """
+    active_choices_param_common(parser, xml_parent, data, 'DynamicReferenceParameter')
+    
+def active_choices_param_common(parser, xml_parent, data, ptype):
+    
+    choice_types = {
+        'singleSelect': 'PT_SINGLE_SELECT',
+        'multiSelect': 'PT_MULTI_SELECT',
+        'radioButtons': 'PT_RADIO',
+        'checkBoxes': 'PT_CHECKBOX',
+        'inputTextBox': 'ET_TEXT_BOX',
+        'numberedList': 'ET_ORDERED_LIST',
+        'bulletItemsList': 'ET_UNORDERED_LIST',
+        'formattedHtml': 'ET_FORMATTED_HTML',
+        'formattedHiddenHtml': 'ET_FORMATTED_HIDDEN_HTML',
+        'PT_SINGLE_SELECT': 'PT_SINGLE_SELECT',
+        'PT_MULTI_SELECT': 'PT_MULTI_SELECT',
+        'PT_RADIO': 'PT_RADIO',
+        'PT_CHECKBOX': 'PT_CHECKBOX',
+        'PT_CHECKBOX': 'PT_CHECKBOX',
+        'ET_TEXT_BOX': 'ET_TEXT_BOX',
+        'ET_ORDERED_LIST': 'ET_ORDERED_LIST',
+        'ET_UNORDERED_LIST': 'ET_UNORDERED_LIST',
+        'ET_FORMATTED_HTML': 'ET_FORMATTED_HTML',
+        'ET_FORMATTED_HIDDEN_HTML': 'ET_FORMATTED_HIDDEN_HTML'
+    }
+    
+    pdef = base_param(parser, xml_parent, data, False,
+                      'org.biouno.unochoice.%s' % ptype)
+    
+    XML.SubElement(pdef, 'randomName').text = data.get('random-name', 
+                                'choice-parameter-%s' % int(time.time()))
+    # Use scriptlet
+    if 'script-id' in data:
+        script = XML.SubElement(pdef, 'script', 
+                                {'class': 'org.biouno.unochoice.model.'
+                                 'ScriptlerScript'})
+        XML.SubElement(script, 'scriptlerScriptId').text = data.get(
+            'script-id', None)
+        
+        parametersXML = XML.SubElement(script, 'parameters')
+        parameters = data.get('parameters', [])
+        if parameters:
+            for parameter in parameters:
+                parameterXML = XML.SubElement(parametersXML, 'entry')
+                XML.SubElement(parameterXML, 'string').text = parameter['name']
+                XML.SubElement(parameterXML, 'string').text = parameter['value']
+    else:
+        script = XML.SubElement(pdef, 'script', 
+                            {'class': 'org.biouno.unochoice.model.'
+                             'GroovyScript'})
+        XML.SubElement(script, 'script').text = data.get('script', None)
+        XML.SubElement(script, 'fallbackScript').text = data.get('fallback-script', None)
+        
+    XML.SubElement(pdef, 'visibleItemCount').text = str(data.get(
+        'visible-items', data.get('visible-item-count', 1)))
+
+    if 'referenced-parameters' in data:
+        XML.SubElement(pdef, 'parameters', 
+                            {'class': 'linked-hash-map'})
+
+        XML.SubElement(pdef, 'referencedParameters').text = data.get(
+          'referenced-parameters')
+
+    try:
+        choice_type = choice_types[data.get('choice-type')]
+    except KeyError:
+        raise ValueError('Invalid choice-type %r' %
+                         data.get('choice-type'))
+
+    XML.SubElement(pdef, 'choiceType').text = choice_type
+    
+    if 'omit-value-field' in data:
+        XML.SubElement(pdef, 'omitValueField').text = str(data.get(
+            'omit-value-field', False)).lower()
+    
+    if 'filterable' in data:
+        XML.SubElement(pdef, 'filterable').text = str(data.get(
+            'filterable', False)).lower()
+    
 
 class Parameters(jenkins_jobs.modules.base.Base):
     sequence = 21

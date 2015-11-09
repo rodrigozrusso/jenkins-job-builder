@@ -1,0 +1,15 @@
+- job:
+    name: active_choice_param002
+    project-type: freestyle
+    parameters:
+      - active-choices:
+          name: OPTIONS
+          description: "Available options"
+          script: |
+              return ['Option 1', 'Option 2', 'Option 3']
+          fallback-script: |
+              return [ 'Script error' ]
+          choice-type: "singleSelect"
+          filterable: false
+#random-name is not necessary, this is here to avoid problems in unittests
+          random-name: choice-parameter-12345678
