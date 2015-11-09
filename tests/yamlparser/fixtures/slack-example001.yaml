@@ -3,9 +3,9 @@
     project-type: freestyle
     properties:
       - slack:
-          token: SlgzqdI80JEJ6lqFHmo4mKBr
-          team-domain: goodgamestudios
-          project-channel: jenkins-test
+          token: SlgzqdI81JEJ6lqFHmo4mKBr
+          team-domain: elitesquad
+          project-channel: slum
           notify-start: true
     publishers:
       - slack
