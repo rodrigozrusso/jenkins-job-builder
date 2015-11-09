@@ -617,11 +617,10 @@ def zeromq_event(parser, xml_parent, data):
 
 def slack(parser, xml_parent, data):
     """yaml: slack
-    This is a Jenkins plugin that will publish Jenkins Job run events
-    (start, complete, finish) to a ZMQ PUB socket.
-
-    Requires the Jenkins `ZMQ Event Publisher.
-    <https://git.openstack.org/cgit/openstack-infra/zmq-event-publisher>`_
+    This is a Jenkins plugin that will configure slack in Jenkins Job.
+    Important! You need to use the publisher `slack` to get it working.
+    
+    Requires the Jenkins :jenkins-wiki:`Slack Plugin <Slack+Plugin>`.
 
     Example:
 
