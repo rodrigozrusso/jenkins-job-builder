@@ -628,9 +628,6 @@ def slack(parser, xml_parent, data):
             /../../tests/properties/fixtures/slack001.yaml
 
     """
-    # TODO:Fix the documentation
-    print data
-
     slack = XML.SubElement(
         xml_parent,
         'jenkins.plugins.slack.SlackNotifier_-SlackJobProperty')
