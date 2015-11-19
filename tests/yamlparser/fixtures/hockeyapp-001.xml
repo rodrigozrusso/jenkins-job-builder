@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<project>
+  <actions/>
+  <description>&lt;!-- Managed by Jenkins Job Builder --&gt;</description>
+  <keepDependencies>false</keepDependencies>
+  <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
+  <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
+  <concurrentBuild>false</concurrentBuild>
+  <canRoam>true</canRoam>
+  <properties/>
+  <scm class="hudson.scm.NullSCM"/>
+  <builders/>
+  <publishers>
+    <hockeyapp.HockeyappRecorder schemaVersion="2">
+      <applications>
+        <hockeyapp.HockeyappApplication schemaVersion="1">
+          <apiToken>12345678901234567890</apiToken>
+          <notifyTeam>true</notifyTeam>
+          <filePath>MyApp/build/Beta-iphoneos/MyApp-Beta-${BUILD_NUMBER}.ipa</filePath>
+          <dsymPath>MyApp/build/Beta-iphoneos/MyApp-Beta-${BUILD_NUMBER}.dsym.zip</dsymPath>
+          <libsPath>MyApp/build/Beta-android/MyApp-Beta-${BUILD_NUMBER}.zip</libsPath>
+          <downloadAllowed>true</downloadAllowed>
+          <oldVersionHolder>
+            <numberOldVersions>5</numberOldVersions>
+          </oldVersionHolder>
+          <releaseNotesMethod class="net.hockeyapp.jenkins.releaseNotes.ManualReleaseNotes">
+            <releaseNotes>changelog line 1
+changelog line 2
+changelog line 3
+</releaseNotes>
+            <isMarkdown>true</isMarkdown>
+          </releaseNotesMethod>
+          <uploadMethod class="net.hockeyapp.jenkins.uploadMethod.VersionCreation">
+            <appId>9999999999999999</appId>
+          </uploadMethod>
+        </hockeyapp.HockeyappApplication>
+        <hockeyapp.HockeyappApplication schemaVersion="1">
+          <apiToken>82345678901234567890</apiToken>
+          <notifyTeam>true</notifyTeam>
+          <filePath>MyApp/build/Beta-iphoneos/MyApp-Beta-${BUILD_NUMBER}.ipa</filePath>
+          <dsymPath>MyApp/build/Beta-iphoneos/MyApp-Beta-${BUILD_NUMBER}.dsym.zip</dsymPath>
+          <libsPath>MyApp/build/Beta-android/MyApp-Beta-${BUILD_NUMBER}.zip</libsPath>
+          <downloadAllowed>true</downloadAllowed>
+          <oldVersionHolder>
+            <numberOldVersions>5</numberOldVersions>
+          </oldVersionHolder>
+          <releaseNotesMethod class="net.hockeyapp.jenkins.releaseNotes.NoReleaseNotes"/>
+          <uploadMethod class="net.hockeyapp.jenkins.uploadMethod.VersionCreation">
+            <appId>9999999999999999</appId>
+          </uploadMethod>
+        </hockeyapp.HockeyappApplication>
+      </applications>
+      <debugMode>true</debugMode>
+      <baseUrl>http://hockeyapp.com/api</baseUrl>
+      <failGracefully>true</failGracefully>
+    </hockeyapp.HockeyappRecorder>
+  </publishers>
+  <buildWrappers/>
+</project>

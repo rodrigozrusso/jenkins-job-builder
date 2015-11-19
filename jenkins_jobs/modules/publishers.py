@@ -5395,6 +5395,154 @@ def slack(parser, xml_parent, data):
 
     slack = XML.SubElement(xml_parent, 'jenkins.plugins.slack.SlackNotifier')
 
+def hockeyapp(parser, xml_parent, data):
+    # TODO: Document it
+    
+    """yaml: hockeyapp
+
+
+    Example:
+
+    .. literalinclude::
+        /../../tests/publishers/fixtures/hockeyapp001.yaml
+       :language: yaml
+    """
+    """
+    
+    """
+    def create_release_notes(node, data):
+        release_notes_types = {
+            'nochangelog': 
+                    'net.hockeyapp.jenkins.releaseNotes.NoReleaseNotes',
+            'changelog': 
+                    'net.hockeyapp.jenkins.releaseNotes.ChangelogReleaseNotes',
+            'load': 
+                    'net.hockeyapp.jenkins.releaseNotes.FileReleaseNotes',
+            'input': 
+                    'net.hockeyapp.jenkins.releaseNotes.ManualReleaseNotes'
+        }
+        
+        if 'release-notes' not in data:
+            XML.SubElement(node, 'releaseNotesMethod', 
+                            {'class': release_notes_types['no']})
+        else:
+            release_notes = data.get('release-notes')
+            notes_type = release_notes['type']
+            
+            print "notes_type: %s" % notes_type
+            
+            release_notes_node = XML.SubElement(node, 'releaseNotesMethod', 
+                            {'class': release_notes_types[notes_type]})
+            
+            if 'load' == notes_type:
+                try:
+                    XML.SubElement(release_notes_node, 'fileName').text = str(
+                                                    release_notes['file-name'])
+                except KeyError as e:
+                    raise MissingAttributeError(e.args[0])
+                
+                XML.SubElement(release_notes_node, 'isMarkdown').text = str(
+                                release_notes.get('markdown', False)).lower()
+            
+            elif 'input' == notes_type:
+                try:
+                    XML.SubElement(release_notes_node, 
+                                   'releaseNotes').text = str(
+                                                    release_notes['notes'])
+                except KeyError as e:
+                    raise MissingAttributeError(e.args[0])
+                
+                XML.SubElement(release_notes_node, 'isMarkdown').text = str(
+                                release_notes.get('markdown', False)).lower()
+    """
+    
+    """
+    def create_upload_method(node, data):
+        
+        upload_methods = {
+                'uploadApp': 'net.hockeyapp.jenkins.uploadMethod.AppCreation',
+                'uploadVersion': 
+                        'net.hockeyapp.jenkins.uploadMethod.VersionCreation'
+        }
+        
+        if 'upload-method' in data:
+            upload_method = data.get('upload-method')
+            upload_type = upload_method['type']
+            upload_method_node = XML.SubElement(node, 'uploadMethod', 
+                            {'class': upload_methods[upload_type]})
+            
+            if 'uploadVersion' == upload_type:
+                try:
+                    XML.SubElement(upload_method_node, 'appId').text = str(
+                                                        upload_method['app-id'])
+                except KeyError as e:
+                    raise MissingAttributeError(e.args[0])
+    
+    def create_application(node, data):
+        hockeyapp_app = XML.SubElement(node, 
+                                   'hockeyapp.HockeyappApplication',
+                                   {'schemaVersion': '1'})
+    
+    
+        try:
+            XML.SubElement(hockeyapp_app, 'apiToken').text = str(
+                                                    data['api-token'])
+        except KeyError as e:
+                raise MissingAttributeError(e.args[0])
+    
+    
+        XML.SubElement(hockeyapp_app, 'notifyTeam').text = str(data.get(
+            'notify', False)).lower()
+    
+        try:
+            XML.SubElement(hockeyapp_app, 'filePath').text = str(
+                                                        data['file-path'])
+        except KeyError as e:
+            raise MissingAttributeError(e.args[0])
+    
+        if 'symbols' in data:
+            XML.SubElement(hockeyapp_app, 'dsymPath').text = str(data.get(
+                                                                'symbols'))
+    
+        if 'packed-libraries' in data:
+            XML.SubElement(hockeyapp_app, 'libsPath').text = str(data.get(
+                                                        'packed-libraries'))
+    
+        XML.SubElement(hockeyapp_app, 'downloadAllowed').text = str(
+            data.get('download', False)).lower()
+    
+
+        if 'number-versions-keep' in data:
+            old_version_holder = XML.SubElement(hockeyapp_app, 
+                                                'oldVersionHolder')
+            XML.SubElement(old_version_holder, 'numberOldVersions').text = str(
+                                        data.get('number-versions-keep', 10))
+            
+        create_release_notes(hockeyapp_app, data)
+        create_upload_method(hockeyapp_app, data)
+    
+    
+    root = XML.SubElement(xml_parent, 'hockeyapp.HockeyappRecorder', 
+                          {'schemaVersion': '2'})
+
+    app_node = XML.SubElement(root, 'applications')
+    
+    if data is None or 'applications' not in data:
+        raise Exception('applications field is missing')
+    else:
+        for app in data.get('applications'):
+            create_application(app_node, app)
+    
+    XML.SubElement(root, 'debugMode').text = str(data.get(
+            'debug', False)).lower()
+    
+    if 'custom-api-url' in data:
+        XML.SubElement(root, 'baseUrl').text = str(data.get('custom-api-url'))
+    
+    XML.SubElement(root, 'failGracefully').text = str(
+            data.get('gracefully', False)).lower()
+    
+
 class Publishers(jenkins_jobs.modules.base.Base):
     sequence = 70
 
