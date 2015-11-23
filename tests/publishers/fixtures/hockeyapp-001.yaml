@@ -1,0 +1,36 @@
+publishers:
+  - hockeyapp:
+      debug: true
+      gracefully: true
+      custom-api-url: http://hockeyapp.com/api
+      applications:
+        - api-token: 12345678901234567890
+          file-path: 'MyApp/build/Beta-iphoneos/MyApp-Beta-${BUILD_NUMBER}.ipa'
+          symbols: MyApp/build/Beta-iphoneos/MyApp-Beta-${BUILD_NUMBER}.dsym.zip
+          packed-libraries: MyApp/build/Beta-android/MyApp-Beta-${BUILD_NUMBER}.zip
+          notify: true
+          download: true
+          number-versions-keep: 5
+          upload-method:
+              type: uploadVersion
+              app-id: 9999999999999999
+          release-notes:
+              type: input
+              notes: |
+                  changelog line 1
+                  changelog line 2
+                  changelog line 3
+              markdown: true
+        - api-token: 12345678901234567891
+          file-path: 'MyApp/build/Beta-iphoneos/MyApp-Beta-${BUILD_NUMBER}.ipa'
+          symbols: MyApp/build/Beta-iphoneos/MyApp-Beta-${BUILD_NUMBER}.dsym.zip
+          packed-libraries: MyApp/build/Beta-android/MyApp-Beta-${BUILD_NUMBER}.zip
+          notify: true
+          download: true
+          number-versions-keep: 5
+          upload-method:
+              type: uploadVersion
+              app-id: 9999999999999999
+          release-notes:
+              type: nochangelog
+              markdown: true
