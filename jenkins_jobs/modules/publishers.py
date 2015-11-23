@@ -1465,13 +1465,15 @@ def ssh(parser, xml_parent, data):
     .. literalinclude::  /../../tests/publishers/fixtures/ssh001.yaml
        :language: yaml
     """
+    ssh_publisher = XML.SubElement(xml_parent, 
+                    'jenkins.plugins.publish__over__ssh.BapSshPublisherPlugin')
     console_prefix = 'SSH: '
     plugin_tag = 'jenkins.plugins.publish__over__ssh.BapSshPublisherPlugin'
     publisher_tag = 'jenkins.plugins.publish__over__ssh.BapSshPublisher'
     transfer_tag = 'jenkins.plugins.publish__over__ssh.BapSshTransfer'
     plugin_reference_tag = 'jenkins.plugins.publish_over_ssh.'    \
         'BapSshPublisherPlugin'
-    base_publish_over(xml_parent,
+    base_publish_over(ssh_publisher,
                       data,
                       console_prefix,
                       plugin_tag,
@@ -4531,8 +4533,7 @@ def conditional_publisher(parser, xml_parent, data):
     def publish_action(parent, action):
         for edited_node in create_publishers(parser, action):
             if not use_publisher_list:
-                edited_node.set('class', edited_node.tag)
-                edited_node.tag = 'publisher'
+                edited_node.tag = 'publisherList'
             parent.append(edited_node)
 
     flex_publisher_tag = 'org.jenkins__ci.plugins.flexible__publish.'    \
